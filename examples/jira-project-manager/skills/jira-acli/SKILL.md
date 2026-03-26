@@ -12,7 +12,7 @@ Use this skill for Jira work via ACLI.
 - Jira site: from `JIRA_SITE` environment variable
 - Account email: from `JIRA_EMAIL` environment variable
 - API token source: environment variable `JIRA_API_TOKEN`
-- Local ACLI binary: `~/.local/bin/acli`
+- ACLI command: `acli`
 
 Do not write raw API tokens into files. Read from `JIRA_API_TOKEN` only. If `JIRA_API_TOKEN` is not set, ask the user to get it at https://id.atlassian.com/manage-profile/security/api-tokens and add it to the environment variable.
 
@@ -37,13 +37,13 @@ acli jira workitem <create|edit|transition>
 2. Verify auth first:
 
 ```bash
-~/.local/bin/acli jira auth status
+acli jira auth status
 ```
 
 3. If not authenticated, log in with stdin token:
 
 ```bash
-printf "%s" "$JIRA_API_TOKEN" | ~/.local/bin/acli jira auth login \
+printf "%s" "$JIRA_API_TOKEN" | acli jira auth login \
   --site "$JIRA_SITE" \
   --email "$JIRA_EMAIL" \
   --token
@@ -52,9 +52,9 @@ printf "%s" "$JIRA_API_TOKEN" | ~/.local/bin/acli jira auth login \
 4. Use `--help` on target commands before guessing flags:
 
 ```bash
-~/.local/bin/acli jira --help
-~/.local/bin/acli jira workitem --help
-~/.local/bin/acli jira workitem create --help
+acli jira --help
+acli jira workitem --help
+acli jira workitem create --help
 ```
 
 ## Getting started reference
@@ -69,19 +69,19 @@ printf "%s" "$JIRA_API_TOKEN" | ~/.local/bin/acli jira auth login \
 Create a work item:
 
 ```bash
-~/.local/bin/acli jira workitem create --summary "New Task" --project "TEAM" --type "Task"
+acli jira workitem create --summary "New Task" --project "TEAM" --type "Task"
 ```
 
 Edit work items by key:
 
 ```bash
-~/.local/bin/acli jira workitem edit --key "KEY-1,KEY-2" --summary "New Summary"
+acli jira workitem edit --key "KEY-1,KEY-2" --summary "New Summary"
 ```
 
 Transition work items:
 
 ```bash
-~/.local/bin/acli jira workitem transition --key "KEY-1,KEY-2" --status "Done"
+acli jira workitem transition --key "KEY-1,KEY-2" --status "Done"
 ```
 
 ## Safety notes
