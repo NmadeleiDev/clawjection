@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://clawjection.dev/schemas/result.schema.json",
+  "$id": "https://raw.githubusercontent.com/NmadeleiDev/clawjection/main/schemas/result.schema.json",
   "title": "ClawJection Result",
   "type": "object",
   "additionalProperties": false,
