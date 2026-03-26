@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import sys
 from pathlib import Path
 
 
@@ -23,52 +24,44 @@ def main() -> int:
             }
         )
 
-    return write_result(
-        {
-            "status": "needs_user_action",
-            "summary": "Configured Jira project manager example and installed local tooling.",
-            "changed_files": [
-                f"{runtime['workspace_label']}/IDENTITY.md",
-                f"{runtime['workspace_label']}/AGENTS.md",
-                f"{runtime['workspace_label']}/memory.md",
-            ],
-            "installed_packages": [
-                "gogcli",
-                "atlassian-cli",
-            ],
-            "installed_skills": [
-                "bundle://skills/jira-acli",
-                "clawhub.ai/steipete/gog",
-            ],
-            "user_actions": [
-                {
-                    "id": "gog-manual-auth",
-                    "title": "Start gog remote auth",
-                    "instruction": "Tell the user to run the first-step `gog auth add` command in remote/manual mode, open the printed auth URL, finish auth in the browser, and then send back the returned auth value needed for the second step.",
-                    "kind": "manual_step",
-                    "required": True,
-                    "notes": "After the user sends the returned auth value, continue the second-step gog auth flow."
-                },
-                {
-                    "id": "jira-api-token",
-                    "title": "Provide Jira API token",
-                    "instruction": "Ask the user for a Jira API token and use the runtime's preferred secret flow.",
-                    "kind": "provide_input",
-                    "required": True,
-                    "secret": True,
-                },
-            ],
-            "agent_followup": {
-                "mode": "ask_user",
-                "priority": "blocking",
-                "instruction": "Ask the user to complete the first-step gog auth flow and send back the returned auth value, then complete the second gog auth step and finally ask for the Jira API token.",
+    payload = {
+        "status": "needs_user_action",
+        "summary": "Configured Jira project manager example and installed local tooling.",
+        "changed_files": [
+            f"{runtime['workspace_label']}/IDENTITY.md",
+            f"{runtime['workspace_label']}/AGENTS.md",
+            f"{runtime['workspace_label']}/memory.md",
+        ],
+        "installed_packages": [
+            "gogcli",
+            "atlassian-cli",
+        ],
+        "installed_skills": [
+            "bundle://skills/jira-acli",
+            "clawhub.ai/steipete/gog",
+        ],
+        "followups": [
+            {
+                "id": "collect-jira-credentials",
+                "instruction": "Ask the user for Jira email, Jira base URL, and Jira API token.",
+                "blocking": True,
             },
-            "artifacts": [
-                str(runtime["config_path"]),
-                str(runtime["workspace_path"]),
-            ],
-        }
-    )
+            {
+                "id": "complete-gog-auth",
+                "instruction": "Run the first step of gog auth, send the user the auth URL, get the redirect URL back from the user, and finish auth.",
+                "blocking": True,
+                "notes": "Use the collected Jira email when constructing the gog auth command.",
+            },
+        ],
+        "artifacts": [
+            str(runtime["config_path"]),
+            str(runtime["workspace_path"]),
+        ],
+    }
+    print("FOLLOWUPS:", file=sys.stdout)
+    for idx, followup in enumerate(payload["followups"], start=1):
+        print(f"{idx}. {followup['instruction']}", file=sys.stdout)
+    return write_result(payload)
 
 
 def parse_args() -> argparse.Namespace:
