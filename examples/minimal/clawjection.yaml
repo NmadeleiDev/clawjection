@@ -1,0 +1,5 @@
+schema_version: 1
+name: Minimal Example
+version: 0.1.0
+entrypoint:
+  path: run.sh

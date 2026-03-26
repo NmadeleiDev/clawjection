@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://clawjection.dev/schemas/result.schema.json",
+  "title": "ClawJection Result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["status", "summary"],
+  "properties": {
+    "status": {
+      "type": "string",
+      "enum": ["ok", "needs_user_action", "failed"]
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "changed_files": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "installed_packages": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "installed_skills": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "warnings": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "errors": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "user_actions": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/user_action" }
+    },
+    "agent_followup": {
+      "$ref": "#/$defs/agent_followup"
+    },
+    "artifacts": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "$defs": {
+    "user_action": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title", "instruction", "kind", "required"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "title": { "type": "string", "minLength": 1 },
+        "instruction": { "type": "string", "minLength": 1 },
+        "kind": {
+          "type": "string",
+          "enum": ["provide_input", "authenticate", "visit_url", "run_command", "manual_step"]
+        },
+        "required": { "type": "boolean" },
+        "secret": { "type": "boolean" },
+        "input_key": { "type": "string" },
+        "example": { "type": "string" },
+        "url": { "type": "string" },
+        "notes": { "type": "string" }
+      }
+    },
+    "agent_followup": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "priority", "instruction"],
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": ["ask_user", "retry_after_input", "validate_only", "done"]
+        },
+        "priority": {
+          "type": "string",
+          "enum": ["blocking", "important", "informational"]
+        },
+        "instruction": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  }
+}
