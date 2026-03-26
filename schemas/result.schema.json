@@ -61,7 +61,6 @@
         },
         "required": { "type": "boolean" },
         "secret": { "type": "boolean" },
-        "input_key": { "type": "string" },
         "example": { "type": "string" },
         "url": { "type": "string" },
         "notes": { "type": "string" }

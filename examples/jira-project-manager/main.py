@@ -56,7 +56,6 @@ def main() -> int:
                     "kind": "provide_input",
                     "required": True,
                     "secret": True,
-                    "input_key": "jira_api_token",
                 },
             ],
             "agent_followup": {

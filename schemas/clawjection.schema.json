@@ -51,10 +51,6 @@
         }
       }
     },
-    "inputs": {
-      "type": "array",
-      "items": { "$ref": "#/$defs/input" }
-    },
     "compatibility": {
       "type": "object",
       "additionalProperties": true
@@ -62,29 +58,6 @@
     "defaults": {
       "type": "object",
       "additionalProperties": true
-    }
-  },
-  "$defs": {
-    "input": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["key", "type"],
-      "properties": {
-        "key": { "type": "string", "minLength": 1 },
-        "label": { "type": "string" },
-        "description": { "type": "string" },
-        "type": {
-          "type": "string",
-          "enum": ["string", "boolean", "enum", "url", "secret"]
-        },
-        "required": { "type": "boolean" },
-        "default": {},
-        "enum": {
-          "type": "array",
-          "items": { "type": "string" }
-        },
-        "secret": { "type": "boolean" }
-      }
     }
   }
 }

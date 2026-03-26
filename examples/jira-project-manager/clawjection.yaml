@@ -5,16 +5,3 @@ version: 0.1.0
 description: Configure OpenClaw as a Jira-focused project manager.
 entrypoint:
   path: main.py
-inputs:
-  - key: jira_base_url
-    label: Jira Base URL
-    type: url
-    required: true
-  - key: jira_email
-    label: Jira Account Email
-    type: string
-    required: true
-  - key: jira_api_token
-    label: Jira API Token
-    type: secret
-    required: false
