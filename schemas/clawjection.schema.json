@@ -59,10 +59,6 @@
       "type": "object",
       "additionalProperties": true
     },
-    "capabilities": {
-      "type": "array",
-      "items": { "type": "string" }
-    },
     "defaults": {
       "type": "object",
       "additionalProperties": true

@@ -96,7 +96,6 @@ Inspect examples:
 ## Open Questions
 
 - Whether lifecycle verbs beyond `apply` should become mandatory
-- Whether capability strings should become enforceable instead of disclosure-only
 - Whether provenance/signatures should be required in a later version
 
 ## License

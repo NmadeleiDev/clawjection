@@ -18,8 +18,3 @@ inputs:
     label: Jira API Token
     type: secret
     required: false
-capabilities:
-  - workspace.write
-  - skills.write
-  - packages.install
-  - auth.prompts
