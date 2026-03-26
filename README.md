@@ -73,6 +73,10 @@ Inspect examples:
 - [`examples/minimal`](examples/minimal)
 - [`examples/jira-project-manager`](examples/jira-project-manager)
 
+Agent skill:
+- [`clawjection-skill/SKILL.md`](clawjection-skill/SKILL.md)
+  - first-party instructions for an agent that needs to install and run arbitrary ClawJections
+
 ## Example Bundles
 
 `examples/minimal`
