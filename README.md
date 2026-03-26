@@ -31,6 +31,7 @@ This repository currently contains a draft v1 standard, JSON schemas, and exampl
 - bundle root detection rules
 - manifest fields
 - entrypoint execution contract
+- default OpenClaw config discovery via `~/.openclaw/openclaw.json`
 - result JSON contract
 - structured post-install user handoff via `user_actions` and `agent_followup`
 
@@ -62,6 +63,8 @@ That is why the v1 result schema includes:
 
 Read the standard:
 - [`standard/v1.md`](standard/v1.md)
+
+By default, bundles should discover the target runtime from `~/.openclaw/openclaw.json`. When needed, entrypoints may also support `--openclaw-config-path`.
 
 Validate manifests/results against the schemas:
 - [`schemas/clawjection.schema.json`](schemas/clawjection.schema.json)
