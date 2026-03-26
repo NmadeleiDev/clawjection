@@ -33,7 +33,7 @@ This repository currently contains a draft v1 standard, JSON schemas, and exampl
 - entrypoint execution contract
 - default OpenClaw config discovery via `~/.openclaw/openclaw.json`
 - result JSON contract
-- structured post-install user handoff via `user_actions` and `agent_followup`
+- structured post-install handoff via ordered `followups`
 
 ## What Is Not Standardized
 
@@ -56,8 +56,7 @@ Example:
 - then tell the agent to ask for a Jira API token
 
 That is why the v1 result schema includes:
-- `user_actions`
-- `agent_followup`
+- `followups`
 
 ## Quick Start
 
@@ -84,7 +83,7 @@ Inspect examples:
 - installs local tooling
 - installs a bundled Jira skill
 - installs `https://clawhub.ai/steipete/gog`
-- returns blocking follow-up instructions for human auth and secret input
+- returns ordered follow-up instructions for credential collection and auth
 
 ## Design Principles
 

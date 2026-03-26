@@ -34,12 +34,9 @@
       "type": "array",
       "items": { "type": "string" }
     },
-    "user_actions": {
+    "followups": {
       "type": "array",
-      "items": { "$ref": "#/$defs/user_action" }
-    },
-    "agent_followup": {
-      "$ref": "#/$defs/agent_followup"
+      "items": { "$ref": "#/$defs/followup" }
     },
     "artifacts": {
       "type": "array",
@@ -47,42 +44,15 @@
     }
   },
   "$defs": {
-    "user_action": {
+    "followup": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "title", "instruction", "kind", "required"],
+      "required": ["id", "instruction"],
       "properties": {
         "id": { "type": "string", "minLength": 1 },
-        "title": { "type": "string", "minLength": 1 },
         "instruction": { "type": "string", "minLength": 1 },
-        "kind": {
-          "type": "string",
-          "enum": ["provide_input", "authenticate", "visit_url", "run_command", "manual_step"]
-        },
-        "required": { "type": "boolean" },
-        "secret": { "type": "boolean" },
-        "example": { "type": "string" },
-        "url": { "type": "string" },
+        "blocking": { "type": "boolean" },
         "notes": { "type": "string" }
-      }
-    },
-    "agent_followup": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["mode", "priority", "instruction"],
-      "properties": {
-        "mode": {
-          "type": "string",
-          "enum": ["ask_user", "retry_after_input", "validate_only", "done"]
-        },
-        "priority": {
-          "type": "string",
-          "enum": ["blocking", "important", "informational"]
-        },
-        "instruction": {
-          "type": "string",
-          "minLength": 1
-        }
       }
     }
   }

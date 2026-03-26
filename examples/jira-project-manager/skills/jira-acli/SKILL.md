@@ -14,7 +14,7 @@ Use this skill for Jira work via ACLI.
 - API token source: environment variable `JIRA_API_TOKEN`
 - Local ACLI binary: `~/.local/bin/acli`
 
-Do not write raw API tokens into files. Read from `JIRA_API_TOKEN` only.
+Do not write raw API tokens into files. Read from `JIRA_API_TOKEN` only. If `JIRA_API_TOKEN` is not set, ask the user to get it at https://id.atlassian.com/manage-profile/security/api-tokens and add it to the environment variable.
 
 ## CLI shape
 
