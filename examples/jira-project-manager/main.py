@@ -1,13 +1,17 @@
 #!/usr/bin/env python3
-"""Illustrative ClawJection entrypoint for the Jira project manager example."""
+"""Reference ClawJection entrypoint for the Jira project manager example."""
 
 from __future__ import annotations
 
 import argparse
+import shutil
 import json
 import os
 import sys
 from pathlib import Path
+
+AGENTS_MARKER = "<!-- CLAWJECTION_JIRA_PROJECT_MANAGER -->"
+MEMORY_MARKER = "<!-- CLAWJECTION_JIRA_MEMORY -->"
 
 
 def main() -> int:
@@ -24,20 +28,22 @@ def main() -> int:
             }
         )
 
+    changes = apply_workspace_changes(runtime["workspace_path"])
+    skill_target = install_bundled_skill(runtime["workspace_path"])
+
     payload = {
         "status": "needs_user_action",
-        "summary": "Configured Jira project manager example and installed local tooling.",
+        "summary": "Configured Jira project manager example, updated workspace files, and installed the bundled Jira skill.",
         "changed_files": [
-            f"{runtime['workspace_label']}/IDENTITY.md",
-            f"{runtime['workspace_label']}/AGENTS.md",
-            f"{runtime['workspace_label']}/memory.md",
+            to_relative_label(path, runtime["workspace_path"])
+            for path in [*changes, skill_target]
         ],
         "installed_packages": [
             "gogcli",
             "atlassian-cli",
         ],
         "installed_skills": [
-            "bundle://skills/jira-acli",
+            to_relative_label(skill_target, runtime["workspace_path"]),
             "clawhub.ai/steipete/gog",
         ],
         "followups": [
@@ -88,6 +94,67 @@ def resolve_openclaw_runtime(cli_config_path: str | None) -> dict[str, Path | st
         "workspace_path": workspace_path,
         "workspace_label": workspace_path.name or str(workspace_path),
     }
+
+
+def apply_workspace_changes(workspace_path: Path) -> list[Path]:
+    workspace_path.mkdir(parents=True, exist_ok=True)
+
+    identity_path = workspace_path / "IDENTITY.md"
+    identity_content = (
+        "# Identity\n\n"
+        "You are a project manager focused on Jira-based planning, execution, tracking, and follow-up.\n"
+    )
+    identity_path.write_text(identity_content, encoding="utf-8")
+
+    agents_path = workspace_path / "AGENTS.md"
+    agents_block = (
+        f"{AGENTS_MARKER}\n"
+        "## Jira Project Manager Mode\n\n"
+        "- Prefer Jira as the source of truth for work tracking.\n"
+        "- Use the bundled Jira ACLI skill for Jira operations.\n"
+        "- Use the ClawHub `gog` skill for Google account and auth workflows.\n"
+        "- Ask the user for missing credentials instead of guessing them.\n"
+    )
+    append_once(agents_path, agents_block, AGENTS_MARKER)
+
+    memory_path = workspace_path / "memory.md"
+    memory_block = (
+        f"{MEMORY_MARKER}\n"
+        "- This agent was configured by the Jira Project Manager ClawJection.\n"
+        "- Default posture: gather Jira context first, then plan, then execute.\n"
+    )
+    append_once(memory_path, memory_block, MEMORY_MARKER)
+
+    return [identity_path, agents_path, memory_path]
+
+
+def install_bundled_skill(workspace_path: Path) -> Path:
+    source_skill = Path(__file__).resolve().parent / "skills" / "jira-acli" / "SKILL.md"
+    target_skill = workspace_path / "skills" / "jira-acli" / "SKILL.md"
+    target_skill.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(source_skill, target_skill)
+    return target_skill
+
+
+def append_once(path: Path, block: str, marker: str) -> None:
+    existing = path.read_text(encoding="utf-8") if path.exists() else ""
+    if marker in existing:
+        return
+
+    prefix = existing.rstrip()
+    rendered = block.rstrip() + "\n"
+    if prefix:
+        path.write_text(prefix + "\n\n" + rendered, encoding="utf-8")
+    else:
+        path.write_text(rendered, encoding="utf-8")
+
+
+def to_relative_label(path: Path, workspace_path: Path) -> str:
+    try:
+        relative = path.relative_to(workspace_path)
+    except ValueError:
+        return str(path)
+    return f"{workspace_path.name}/{relative.as_posix()}"
 
 
 def discover_workspace(payload: object, fallback: Path) -> Path:
