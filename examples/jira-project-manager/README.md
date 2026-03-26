@@ -29,18 +29,26 @@ python3 main.py apply --openclaw-config-path /path/to/openclaw.json
 
 When run successfully, this example:
 - discovers the OpenClaw workspace from `openclaw.json`
-- writes `IDENTITY.md`
-- appends a Jira project-manager block to `AGENTS.md`
-- appends a seed block to `memory.md`
+- overwrites `IDENTITY.md` with a filled Jira project-manager identity
+- writes `SOUL.md`
+- appends or updates a managed Jira tooling block in `TOOLS.md`
+- writes `MEMORY.md`
+- appends or updates a Jira project-manager block in `AGENTS.md`
+- seeds the daily memory log in `memory/YYYY-MM-DD.md`
+- installs CLI wrappers in `bin/acli` and `bin/gog`
 - installs the bundled Jira ACLI skill into `skills/jira-acli/SKILL.md`
-- reports installation of the ClawHub `gog` skill
+- runs `clawhub install gog` to install the ClawHub `gog` skill
 - returns ordered `followups` telling the agent to:
-  - ask the user for Jira email, Jira base URL, and Jira API token
-  - run the first step of `gog` auth, send the auth URL to the user, receive the redirect URL, and finish auth
+  - ask the user for Jira base URL, Jira email, and Jira API token
+  - ask the user to enable the main Google APIs, send Google OAuth client credentials or provide them through environment-backed secret input, then run `gog auth credentials <path-to-client-secret.json>` on the host
+  - run `gog auth add <jira-email> --services user --manual`, send the auth URL to the user, receive the redirect URL, and finish auth
+
+This example treats `IDENTITY.md` as part of the role switch. Running it replaces the existing identity file with the bundled Jira project-manager identity.
 
 ## Files of interest
 
 - `clawjection.yaml`
 - `main.py`
+- `assets/`
 - `skills/jira-acli/SKILL.md`
 - `docs/OVERVIEW.md`
